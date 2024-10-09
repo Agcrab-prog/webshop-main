@@ -1,0 +1,38 @@
+<!-- views/payment.ejs -->
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fizetési Űrlap</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Fizetési Űrlap</h1>
+
+        <!-- Hibaüzenet megjelenítése -->
+        <% if (errorMessage) { %>
+            <div class="alert alert-danger" role="alert">
+                <%= errorMessage %>
+            </div>
+        <% } %>
+
+        <form action="/payment" method="post">
+            <div class="form-group">
+                <label for="name">Név</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="accountNumber">Bankszámlaszám</label>
+                <input type="text" class="form-control" id="accountNumber" name="accountNumber" required>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="termsAccepted" name="termsAccepted" required>
+                <label class="form-check-label" for="termsAccepted">Elfogadom a szerződési feltételeket</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Küldés</button>
+        </form>
+    </div>
+</body>
+</html>

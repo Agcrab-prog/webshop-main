@@ -1,15 +1,29 @@
-import { Controller, Get, Render } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller, Get, Post, Body, Res, Query } from '@nestjs/common';
+import { Response } from 'express';
+import { handlePaymentFormSubmission } from './PaymentForm';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+    @Get('/payment')
+    getPaymentForm(@Res() res: Response): void {
+        res.render('payment', { errorMessage: null });
+    }
 
-  @Get()
-  @Render('index')
-  getHello() {
-    return {
-      message: this.appService.getHello()
-    };
-  }
+    @Post('/payment')
+    async postPaymentForm(@Body() body: any, @Res() res: Response): Promise<void> {
+        const result = await handlePaymentFormSubmission(body);
+
+        if (result.error) {
+            return res.render('payment', { errorMessage: result.error });
+        }
+
+        // Átirányítjuk a felhasználót a siker oldalra, a névvel és a bankszámlaszámmal
+        res.redirect(`/success?name=${encodeURIComponent(body.name)}&accountNumber=${encodeURIComponent(body.accountNumber)}`);
+    }
+
+    @Get('/success')
+    getSuccess(@Query('name') name: string, @Query('accountNumber') accountNumber: string, @Res() res: Response): void {
+        // A siker oldalon megjelenítjük a query paraméterekből érkező adatokat
+        res.render('success', { name, accountNumber });
+    }
 }
