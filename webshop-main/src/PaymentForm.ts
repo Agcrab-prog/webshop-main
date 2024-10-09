@@ -1,21 +1,17 @@
-// src/PaymentForm.ts
-import { Request } from 'express';
+import { Request, Response } from 'express';
 
-export async function handlePaymentFormSubmission(body: any): Promise<{ error?: string }> {
+export function handlePaymentFormSubmission(body: any): { error?: string } {
     const { name, accountNumber, termsAccepted } = body;
 
-    // Ellenőrzés és válasz küldése
     if (!name || !accountNumber || !termsAccepted) {
         return { error: 'All fields are required.' };
     }
 
-    // Bankszámlaszám validálás
-    const isValidAccountNumber = /^\d{8}(-\d{8})?$/.test(accountNumber);
+    const isValidAccountNumber = /^(?:\d{8}(-\d{8})?|(\d{8})){1}$/.test(accountNumber);
     
     if (!isValidAccountNumber) {
-        return { error: 'Invalid account number format.' };
+        return { error: 'Invalid account number format. Must be either 2x8 or 3x8 digits separated by hyphens.' };
     }
 
-    // Sikeres beküldés
-    return {};
+    return {}; 
 }

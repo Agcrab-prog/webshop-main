@@ -17,13 +17,11 @@ export class AppController {
             return res.render('payment', { errorMessage: result.error });
         }
 
-        // Átirányítjuk a felhasználót a siker oldalra, a névvel és a bankszámlaszámmal
         res.redirect(`/success?name=${encodeURIComponent(body.name)}&accountNumber=${encodeURIComponent(body.accountNumber)}`);
     }
 
     @Get('/success')
     getSuccess(@Query('name') name: string, @Query('accountNumber') accountNumber: string, @Res() res: Response): void {
-        // A siker oldalon megjelenítjük a query paraméterekből érkező adatokat
         res.render('success', { name, accountNumber });
     }
 }
